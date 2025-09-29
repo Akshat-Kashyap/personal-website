@@ -1825,34 +1825,6 @@ p {
   transform: translateY(-2px);
   box-shadow: var(--shadow-neon);
 }
-/* Form Status Styles */
-.form-status {
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 500;
-  backdrop-filter: blur(10px);
-}
-
-.form-status i {
-  font-size: 1.2rem;
-}
-
-/* Disabled state styles */
-.form-group input:disabled,
-.form-group textarea:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none !important;
-}
 
 /* ===== CATEGORY FILTERS ===== */
 .category-filters {
