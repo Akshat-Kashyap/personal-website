@@ -23,15 +23,33 @@ const Contact = () => {
     setIsSubmitting(true);
     setSubmitStatus('');
 
-    // Simulate form submission (replace this with actual service later)
-    setTimeout(() => {
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '' });
+    try {
+      // Replace 'YOUR_FORMSPREE_FORM_ID' with your actual Formspree form ID
+      const response = await fetch('https://formspree.io/f/xzzjeaqg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          _replyto: formData.email, // This ensures replies go to the sender
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
       setIsSubmitting(false);
-      
-      // In a real scenario, you would send data to Formspree/EmailJS here
-      console.log('Form data:', formData);
-    }, 1500);
+    }
   };
 
   const contactInfo = [
@@ -41,12 +59,6 @@ const Contact = () => {
       content: "akshatkashyap.work@gmail.com",
       link: "mailto:akshatkashyap.work@gmail.com"
     },
-    /*{
-      icon: "fas fa-phone", 
-      title: "Phone",
-      content: "+91 7007241423",
-      link: "tel:+917007241423"
-    },*/
     {
       icon: "fas fa-briefcase",
       title: "Status", 
@@ -105,7 +117,7 @@ const Contact = () => {
                     <a href="https://github.com/Akshat-Kashyap" target="_blank" rel="noopener noreferrer" className="social-link">
                       <i className="fab fa-github"></i>
                     </a>
-                    <a href="#" className="social-link">
+                    <a href="https://github.com/Akshat-Kashyap" className="social-link">
                       <i className="fas fa-chart-bar"></i>
                     </a>
                   </div>
@@ -122,14 +134,14 @@ const Contact = () => {
                 {submitStatus === 'success' && (
                   <div className="form-status success">
                     <i className="fas fa-check-circle"></i>
-                    Thank you! Please Connect via Linkeding or Email.
+                    Thank you! Your message has been sent successfully. I'll get back to you soon.
                   </div>
                 )}
                 
                 {submitStatus === 'error' && (
                   <div className="form-status error">
                     <i className="fas fa-exclamation-circle"></i>
-                    Sorry, there was an error sending your message. Please try again or email me directly.
+                    Sorry, there was an error sending your message. Please try again or email me directly at akshatkashyap.work@gmail.com
                   </div>
                 )}
 
