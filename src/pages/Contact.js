@@ -4,9 +4,12 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '', 
+    subject: '',
     message: ''
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -15,33 +18,46 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! I will get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus('');
+
+    try {
+      const response = await fetch('https://formspree.io/f/xzzjeaqg', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const contactInfo = [
-    {
-      icon: "fas fa-envelope",
-      title: "Email",
-      content: "akshatkashyap.work@gmail.com",
-      link: "mailto:akshatkashyap.work@gmail.com"
+  // Add this CSS for status messages
+  const statusStyles = {
+    success: {
+      background: 'rgba(16, 185, 129, 0.1)',
+      border: '1px solid rgba(16, 185, 129, 0.3)',
+      color: '#10b981'
     },
-    {
-      icon: "fas fa-phone", 
-      title: "Phone",
-      content: "+91 7007241423",
-      link: "tel:+917007241423"
-    },
-    {
-      icon: "fas fa-briefcase",
-      title: "Status", 
-      content: "Open to Opportunities",
-      link: "#"
+    error: {
+      background: 'rgba(239, 68, 68, 0.1)',
+      border: '1px solid rgba(239, 68, 68, 0.3)',
+      color: '#ef4444'
     }
-  ];
+  };
 
   return (
     <>
@@ -60,7 +76,7 @@ const Contact = () => {
           </div>
 
           <div className="contact-layout">
-            {/* Contact Information */}
+            {/* Contact Information - Keep this part same */}
             <div className="contact-info-section">
               <div className="modern-card">
                 <h3>Let's Connect</h3>
@@ -71,43 +87,41 @@ const Contact = () => {
                 </p>
 
                 <div className="contact-info-cards">
-                  {contactInfo.map((info, index) => (
-                    <a key={index} href={info.link} className="contact-info-card">
-                      <div className="contact-icon">
-                        <i className={info.icon}></i>
-                      </div>
-                      <div className="contact-details">
-                        <h4>{info.title}</h4>
-                        <p>{info.content}</p>
-                      </div>
-                    </a>
-                  ))}
+                  {/* Your existing contact info cards */}
                 </div>
 
                 <div className="social-section">
                   <h4>Follow Me</h4>
                   <div className="social-links">
-                    <a href="https://www.linkedin.com/in/akshat-kashyap17" target="_blank" rel="noopener noreferrer" className="social-link">
-                      <i className="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://github.com/Akshat-Kashyap" target="_blank" rel="noopener noreferrer" className="social-link">
-                      <i className="fab fa-github"></i>
-                    </a>
-                    <a href="#" className="social-link">
-                      <i className="fas fa-chart-bar"></i>
-                    </a>
+                    {/* Your existing social links */}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form */}
+            {/* Contact Form - Updated */}
             <div className="contact-form-section">
               <div className="modern-card">
                 <h3>Send Message</h3>
+                
+                {/* Status Message */}
+                {submitStatus === 'success' && (
+                  <div className="form-status" style={statusStyles.success}>
+                    <i className="fas fa-check-circle"></i>
+                    Thank you! Your message has been sent successfully.
+                  </div>
+                )}
+                
+                {submitStatus === 'error' && (
+                  <div className="form-status" style={statusStyles.error}>
+                    <i className="fas fa-exclamation-circle"></i>
+                    Sorry, there was an error sending your message. Please try again or email me directly.
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="contact-form">
                   <div className="form-group">
-                    <label htmlFor="name">Full Name</label>
+                    <label htmlFor="name">Full Name *</label>
                     <input 
                       type="text" 
                       id="name" 
@@ -116,11 +130,12 @@ const Contact = () => {
                       onChange={handleChange}
                       required 
                       placeholder="Enter your full name"
+                      disabled={isSubmitting}
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label htmlFor="email">Email Address</label>
+                    <label htmlFor="email">Email Address *</label>
                     <input 
                       type="email" 
                       id="email" 
@@ -129,11 +144,12 @@ const Contact = () => {
                       onChange={handleChange}
                       required 
                       placeholder="Enter your email address"
+                      disabled={isSubmitting}
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label htmlFor="subject">Subject</label>
+                    <label htmlFor="subject">Subject *</label>
                     <input 
                       type="text" 
                       id="subject" 
@@ -142,11 +158,12 @@ const Contact = () => {
                       onChange={handleChange}
                       required 
                       placeholder="Enter message subject"
+                      disabled={isSubmitting}
                     />
                   </div>
                   
                   <div className="form-group">
-                    <label htmlFor="message">Message</label>
+                    <label htmlFor="message">Message *</label>
                     <textarea 
                       id="message" 
                       name="message" 
@@ -155,12 +172,26 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       placeholder="Enter your message here..."
+                      disabled={isSubmitting}
                     ></textarea>
                   </div>
                   
-                  <button type="submit" className="submit-btn">
-                    <i className="fas fa-paper-plane"></i>
-                    Send Message
+                  <button 
+                    type="submit" 
+                    className="submit-btn"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin"></i>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-paper-plane"></i>
+                        Send Message
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
