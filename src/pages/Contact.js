@@ -23,41 +23,37 @@ const Contact = () => {
     setIsSubmitting(true);
     setSubmitStatus('');
 
-    try {
-      const response = await fetch('https://formspree.io/f/xzzjeaqg', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      } else {
-        setSubmitStatus('error');
-      }
-    } catch (error) {
-      setSubmitStatus('error');
-    } finally {
+    // Simulate form submission (replace this with actual service later)
+    setTimeout(() => {
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setIsSubmitting(false);
-    }
+      
+      // In a real scenario, you would send data to Formspree/EmailJS here
+      console.log('Form data:', formData);
+    }, 1500);
   };
 
-  // Add this CSS for status messages
-  const statusStyles = {
-    success: {
-      background: 'rgba(16, 185, 129, 0.1)',
-      border: '1px solid rgba(16, 185, 129, 0.3)',
-      color: '#10b981'
+  const contactInfo = [
+    {
+      icon: "fas fa-envelope",
+      title: "Email",
+      content: "akshatkashyap.work@gmail.com",
+      link: "mailto:akshatkashyap.work@gmail.com"
     },
-    error: {
-      background: 'rgba(239, 68, 68, 0.1)',
-      border: '1px solid rgba(239, 68, 68, 0.3)',
-      color: '#ef4444'
+    /*{
+      icon: "fas fa-phone", 
+      title: "Phone",
+      content: "+91 7007241423",
+      link: "tel:+917007241423"
+    },*/
+    {
+      icon: "fas fa-briefcase",
+      title: "Status", 
+      content: "Open to Opportunities",
+      link: "#"
     }
-  };
+  ];
 
   return (
     <>
@@ -76,7 +72,7 @@ const Contact = () => {
           </div>
 
           <div className="contact-layout">
-            {/* Contact Information - Keep this part same */}
+            {/* Contact Information */}
             <div className="contact-info-section">
               <div className="modern-card">
                 <h3>Let's Connect</h3>
@@ -87,33 +83,51 @@ const Contact = () => {
                 </p>
 
                 <div className="contact-info-cards">
-                  {/* Your existing contact info cards */}
+                  {contactInfo.map((info, index) => (
+                    <a key={index} href={info.link} className="contact-info-card">
+                      <div className="contact-icon">
+                        <i className={info.icon}></i>
+                      </div>
+                      <div className="contact-details">
+                        <h4>{info.title}</h4>
+                        <p>{info.content}</p>
+                      </div>
+                    </a>
+                  ))}
                 </div>
 
                 <div className="social-section">
                   <h4>Follow Me</h4>
                   <div className="social-links">
-                    {/* Your existing social links */}
+                    <a href="https://www.linkedin.com/in/akshat-kashyap17" target="_blank" rel="noopener noreferrer" className="social-link">
+                      <i className="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/Akshat-Kashyap" target="_blank" rel="noopener noreferrer" className="social-link">
+                      <i className="fab fa-github"></i>
+                    </a>
+                    <a href="#" className="social-link">
+                      <i className="fas fa-chart-bar"></i>
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Contact Form - Updated */}
+            {/* Contact Form */}
             <div className="contact-form-section">
               <div className="modern-card">
                 <h3>Send Message</h3>
                 
                 {/* Status Message */}
                 {submitStatus === 'success' && (
-                  <div className="form-status" style={statusStyles.success}>
+                  <div className="form-status success">
                     <i className="fas fa-check-circle"></i>
-                    Thank you! Your message has been sent successfully.
+                    Thank you! Please Connect via Linkeding or Email.
                   </div>
                 )}
                 
                 {submitStatus === 'error' && (
-                  <div className="form-status" style={statusStyles.error}>
+                  <div className="form-status error">
                     <i className="fas fa-exclamation-circle"></i>
                     Sorry, there was an error sending your message. Please try again or email me directly.
                   </div>
