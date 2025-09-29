@@ -19,10 +19,10 @@ const Home = () => {
   }, [roles.length]);
 
   const downloadResume = () => {
-    const resumeUrl = 'https://drive.google.com/file/d/1PpNdvNEyKyJxsK7ImRXac_juOBtvth32/view?usp=sharing';
+    const resumeUrl = 'https://drive.google.com/file/d/1WmMyPfHerzTBp1d3Q1eOl7vryot4hiZT/view?usp=sharing';
     const link = document.createElement('a');
     link.href = resumeUrl;
-    link.download = 'https://drive.google.com/file/d/1PpNdvNEyKyJxsK7ImRXac_juOBtvth32/view?usp=sharing';
+    link.download = 'https://drive.google.com/file/d/1WmMyPfHerzTBp1d3Q1eOl7vryot4hiZT/view?usp=sharing';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
